@@ -352,7 +352,12 @@ module RSpotify
     #           playlist.replace_tracks!(tracks)
     #           playlist.tracks.map(&:name) #=> ["Somebody That I Used To Know", "Do I Wanna Know?"]
     def replace_tracks!(tracks)
-      track_uris = tracks.map(&:uri).join(',')
+      track_uris = nil
+      if tracks.first.is_a? String
+        track_uris = tracks.join(',')
+      else
+        track_uris = tracks.map(&:uri).join(',')
+      end
       url = "#{@path}/tracks?uris=#{track_uris}"
       User.oauth_put(@owner.id, url, {})
 
